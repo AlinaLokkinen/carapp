@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Button, Snackbar } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css"
 import "ag-grid-community/styles/ag-theme-material.css";
+import AddCar from "./AddCar";
 
 export default function CarList() {
 
@@ -12,8 +13,11 @@ export default function CarList() {
     const [msgSnackbar, setMsgSnackbar] = useState('');
 
     const [colDefs, setColDefs] = useState([
-        {field: 'brand'},
+        {field: 'brand', filter: true},
         {field: 'model'},
+        {field: 'color'},
+        {field: 'modelYear'},
+        {field: 'price'},
         {cellRenderer: (params) => 
             <Button 
                 size="small"
@@ -51,18 +55,32 @@ export default function CarList() {
         const url = params.data._links.car.href;
         fetch(url, {method: 'DELETE'})
         .then(response => {
-            if (response.ok)
+            if (response.ok) {
                 setOpenSnackbar(true);
-            // viesti
-            else 
-            setOpenSnackbar(true);
-            })
+                setMsgSnackbar('Auto poistettu onnistuneesti!');
+            } else {
+                setOpenSnackbar(true);
+            }
+        })
         .catch(err => console.error(err));
     }
 
+   const saveCar = (car) => {
+        fetch('https://carrestservice-carshop.rahtiapp.fi/cars', {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify(car)
+    })
+        .then(response => getCars())
+        .catch(err => console.error(err))
+   };
+
     return (
         <>
-            <div className="ag-theme-material" style={{width: 700, height: 500}}>
+            <AddCar saveCar={saveCar} />
+            <div className="ag-theme-material" style={{width: 900, height: 500}}>
                 <AgGridReact 
                     rowData={cars}
                     columnDefs={colDefs}
