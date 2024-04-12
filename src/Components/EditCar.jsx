@@ -18,7 +18,13 @@ export default function EditCar(props) {
     });
 
     const handleClickOpen = () => {
-        
+        setCar({
+            brand: props.params.data.brand,
+            model: props.params.data.model, 
+            color: props.params.data.color,
+            modelYear: props.params.data.modelYear,
+            price: props.params.data.price
+        })
         setOpen(true);
     };
 
@@ -30,14 +36,14 @@ export default function EditCar(props) {
         setCar({...car, [e.target.name]: e.target.value});
     };
 
-    const addCar = () => {
-        props.saveCar(car);
+    const updateCar = () => {
+        props.updateCar(car, props.params.data._links.car.href);
         handleClose();
     };
 
     return (
         <>
-            <Button variant="text" onClick={handleClickOpen}>
+            <Button onClick={handleClickOpen}>
                 Edit car
             </Button>
 
@@ -56,7 +62,7 @@ export default function EditCar(props) {
                     },
                 }}
             >
-            <DialogTitle>New Car</DialogTitle>
+            <DialogTitle>Edit Car</DialogTitle>
 
             <DialogContent>
                 <TextField
@@ -110,7 +116,7 @@ export default function EditCar(props) {
 
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={addCar}>Save</Button>
+                <Button onClick={updateCar}>Save</Button>
             </DialogActions>
 
             </Dialog>

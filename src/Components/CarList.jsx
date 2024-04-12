@@ -22,19 +22,14 @@ export default function CarList() {
         {cellRenderer: (params) => 
             <Button 
                 size="small"
-                color="info"
-                onClick={() => <EditCar editCar={editCar}/>}>
-                Edit
-            </Button>,
-            width: 120},
-        {cellRenderer: (params) => 
-            <Button 
-                size="small"
                 color="warning"
                 onClick={() => deleteCar(params)}>
                 Delete
             </Button>,
-            width: 120}
+            width: 120},
+            {cellRenderer: (params) => 
+                <EditCar updateCar={updateCar} params={params} />,
+                width: 120}
     ]);
 
     // hakee autot vain ensimmäisen renderöinnin yhteydessä
@@ -74,9 +69,19 @@ export default function CarList() {
         .catch(err => console.error(err));
     }
 
-    const editCar = () => {
 
-    }
+    const updateCar = (car, link) => {
+        fetch(link, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        body: JSON.stringify(car)
+        })
+        .then(response => getCars())
+        .catch(err => console.error(err))
+    };
+    
 
     // save new car 
     const saveCar = (car) => {
@@ -94,13 +99,12 @@ export default function CarList() {
     return (
         <>
             <AddCar saveCar={saveCar} />
-            <div className="ag-theme-material" style={{width: 900, height: 500}}>
+            <div className="ag-theme-material" style={{width: 1300, height: 500}}>
                 <AgGridReact 
                     rowData={cars}
                     columnDefs={colDefs}
                     pagination={true}
                     paginationPageSize={10}>
-
                 </AgGridReact>
                 <Snackbar
                     open={openSackbar}
