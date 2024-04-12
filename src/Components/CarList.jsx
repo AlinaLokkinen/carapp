@@ -4,6 +4,7 @@ import { Button, Snackbar } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css"
 import "ag-grid-community/styles/ag-theme-material.css";
 import AddCar from "./AddCar";
+import EditCar from "./EditCar";
 
 export default function CarList() {
 
@@ -18,6 +19,14 @@ export default function CarList() {
         {field: 'color'},
         {field: 'modelYear'},
         {field: 'price'},
+        {cellRenderer: (params) => 
+            <Button 
+                size="small"
+                color="info"
+                onClick={() => <EditCar editCar={editCar}/>}>
+                Edit
+            </Button>,
+            width: 120},
         {cellRenderer: (params) => 
             <Button 
                 size="small"
@@ -65,7 +74,12 @@ export default function CarList() {
         .catch(err => console.error(err));
     }
 
-   const saveCar = (car) => {
+    const editCar = () => {
+
+    }
+
+    // save new car 
+    const saveCar = (car) => {
         fetch('https://carrestservice-carshop.rahtiapp.fi/cars', {
             method: 'POST', 
             headers: {
