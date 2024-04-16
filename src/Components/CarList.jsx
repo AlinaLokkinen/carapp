@@ -29,7 +29,7 @@ export default function CarList() {
             width: 120},
             {cellRenderer: (params) => 
                 <EditCar updateCar={updateCar} params={params} />,
-                width: 120}
+                width: 150}
     ]);
 
     // hakee autot vain ensimmäisen renderöinnin yhteydessä
